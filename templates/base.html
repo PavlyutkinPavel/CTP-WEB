@@ -1,0 +1,121 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+<!--    <title>{{title}}</title>-->
+    <title>{% block title%}{% endblock %}</title>
+    <link rel="icon" href="{% static 'website/images/logo/logo.jpg' %}" type="image/png">
+    <link rel="stylesheet" href="{% static 'website/css/styles.css' %}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'website/images/logo/vet_logo.jpg' %}" alt=""
+                     class="d-inline-block align-text-top nav-image">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            ABOUT
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
+                            <li><a class="dropdown-item" href="{% url 'faq' %}">FAQ</a></li>
+                            <li><a class="dropdown-item" href="{% url 'requisites' %}">Requisites</a></li>
+                            <li><a class="dropdown-item" href="{% url 'contacts' %}">Contacts</a></li>
+                            <li><a class="dropdown-item" href="{% url 'privacy-policy' %}">Privacy Policy</a></li>
+                            <li><a class="dropdown-item" href="{% url 'coupons' %}">Coupons</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'article-list' %}">News</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'category_list' %}">Directions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctors_list' %}">Doctors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'medical_centers' %}">Our location</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'vacancy:home' %}">Vacancy</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'review:home' %}">Review</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkAPI" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            API
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkAPI">
+                            <li><a class="dropdown-item" href="{% url 'weather' %}">Weather</a></li>
+                            <li><a class="dropdown-item" href="{% url 'gender' %}">Gender</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {% if user.is_superuser %}
+            <a class="btn btn-outline-secondary me-3" href="{% url 'admin:index' %}">Superuser</a>
+            <a class="btn btn-outline-secondary me-3" href="{% url 'planned_visits' %}">Инфо</a>
+        {% elif user.is_staff %}
+            <a class="btn btn-outline-secondary me-3" href="{% url 'admin:index' %}">Staff</a>
+        {% elif perms.doctors.can_edit_profile %}
+            <a class="btn btn-outline-secondary me-3" href="{% url 'doctor_profile' %}">Врач</a>
+            <a class="btn btn-outline-secondary me-3" href="{% url 'doctor_schedule' %}">Расписание</a>
+            <a class="btn btn-outline-secondary me-3" href="{% url 'doctor_order_list' %}">Записи</a>
+        {% elif user.is_authenticated %}
+            <a class="btn btn-outline-secondary me-3" href="{% url 'patient_profile' %}">Пациент</a>
+            <a class="btn btn-outline-secondary me-3" href="{% url 'patient_order_list' %}">Записи</a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <a class="btn btn-outline-secondary me-3" href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+            <a class="btn btn-outline-secondary me-3" href="{% url 'login' %}">Войти</a>
+            <a class="btn btn-outline-secondary me-3" href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        <main role="main">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+
+<section id="footer">
+    <footer>
+        <p>&copy; 2023 VetClinic. All rights reserved.</p>
+    </footer>
+</section>
+
+</html>

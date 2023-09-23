@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Изменить профиль{% endblock %}
+
+{% block content %}
+    <h1>Изменить профиль</h1>
+    <hr>
+
+    <form method="post" action="{% url 'patient_profile' %}">
+        {% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        <br>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+{% endblock %}

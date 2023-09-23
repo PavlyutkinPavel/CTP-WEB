@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<meta name="description" content="Отзывы о нашей компании">
+<meta name="keywords" content="отзывы, обратная связь, рейтинг, оценки">
+{% endblock %}
+
+{% block content %}
+
+<h1>Отзывы</h1>
+<ul>
+    {% for review in reviews %}
+    <li itemscope itemtype="http://schema.org/Review">
+        <p itemprop="author">Автор: {{ review.author }}</p>
+        <p itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+            Оценка: <span itemprop="ratingValue">{{ review.rating }}</span>
+        </p>
+        <p itemprop="reviewBody">{{ review.text }}</p>
+        <p itemprop="datePublished">Дата: {{ review.date }}</p>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+<label onclick="window.location.href='{%url 'profile_user:profile' %}';">Добавить отзыв</label>
+{% else %}
+<label onclick="window.location.href='{%url 'auth_user:register' %}';">Добавить отзыв</label>
+{% endif %}
+
+
+{% endblock %}
